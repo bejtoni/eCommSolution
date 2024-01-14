@@ -20,12 +20,13 @@ public class Calculations {
 
     public static void calculateFinancials(ArrayList<Order> customerOrders) {
         for(Order order : customerOrders){
-            double currentPrice = 40.0;
+            // Pretpostavka da je total revenue uvijek orderNumber * 40 jer svaka kosta toliko, a profit varira.
+            double profitPrice = 40.0;
+            totalRevenue += profitPrice;
 
-            if(order.hasHoodie())currentPrice += 3.0;
-            if(order.hasDesign())currentPrice += 2.0;
-
-            totalRevenue += currentPrice;
+            profitPrice -= 14.0;
+            if(order.hasHoodie())profitPrice -= 3.0;
+            if(order.hasDesign())profitPrice -= 2.0;
 
             Payment paymentStrategy = paymentStrategyMap.get(order.getPayment());
             if (paymentStrategy == null) {
@@ -33,12 +34,12 @@ public class Calculations {
             }
 
             PaymentContext paymentContext = new PaymentContext(paymentStrategy);
-            currentPrice -= 14.0;
-            double transactionFee = paymentContext.getPaymentFee(currentPrice);
-            totalProfit += (currentPrice - transactionFee);
+
+            double transactionFee = paymentContext.getPaymentFee(40);
+            totalProfit += (profitPrice - transactionFee);
 
             String shirtSize = order.getShirtSize();
-            profitPerShirtSizeMap.put(shirtSize, profitPerShirtSizeMap.getOrDefault(shirtSize, 0.0) + (currentPrice - transactionFee));
+            profitPerShirtSizeMap.put(shirtSize, profitPerShirtSizeMap.getOrDefault(shirtSize, 0.0) + (profitPrice - transactionFee));
         }
     }
 
