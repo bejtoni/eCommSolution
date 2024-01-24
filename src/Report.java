@@ -2,7 +2,7 @@ import java.io.FileWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Report extends Thread {
+public class Report implements Runnable {
     private static final double totalRevenue = Calculations.getTotalRevenue();
     private static final double totalProfit = Calculations.getTotalProfit();
     private static  Map<String, Double> totalPricePerShirtSize = Calculations.getProfitPerShirtSizeMap();
